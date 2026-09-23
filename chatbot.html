@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Admission Enquiry Chatbot</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #eef2f7;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.chatbot {
+    width: 400px;
+    height: 650px;
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 35px rgba(0,0,0,0.2);
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header */
+.header {
+    background: #1769aa;
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+.header h2 {
+    margin-bottom: 5px;
+}
+
+.header p {
+    font-size: 13px;
+}
+
+/* Chat area */
+.messages {
+    flex: 1;
+    padding: 18px;
+    overflow-y: auto;
+    background: #f8fafc;
+}
+
+.message {
+    max-width: 82%;
+    padding: 12px 15px;
+    margin-bottom: 12px;
+    border-radius: 15px;
+    line-height: 1.5;
+    font-size: 14px;
+}
+
+.bot {
+    background: #e5e7eb;
+    color: #111827;
+}
+
+.user {
+    background: #1769aa;
+    color: white;
+    margin-left: auto;
+}
+
+/* Quick buttons */
+.quick-buttons {
+    padding: 10px;
+    display: flex;
+    gap: 7px;
+    flex-wrap: wrap;
+    border-top: 1px solid #ddd;
+}
+
+.quick-buttons button {
+    background: #e8f1fb;
+    color: #1769aa;
+    border: 1px solid #1769aa;
+    padding: 7px 10px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+/* Input */
+.input-area {
+    display: flex;
+    padding: 12px;
+    gap: 8px;
+    border-top: 1px solid #ddd;
+}
+
+#userInput {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 25px;
+    outline: none;
+}
+
+.send {
+    background: #1769aa;
+    color: white;
+    border: none;
+    padding: 12px 18px;
+    border-radius: 25px;
+    cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="chatbot">
+
+    <div class="header">
+        <h2>🎓 Admission Assistant</h2>
+        <p>Ask us about courses & admission</p>
+    </div>
+
+    <div class="messages" id="messages">
+
+        <div class="message bot">
+            👋 Hello! Welcome to our institute.<br><br>
+            I can help you with admission enquiries.<br><br>
+            You can ask me about:<br>
+            • Courses<br>
+            • Fees<br>
+            • Eligibility<br>
+            • Course duration<br>
+            • Admission process<br>
+            • Documents
+        </div>
+
+    </div>
+
+    <div class="quick-buttons">
+        <button onclick="quickQuestion('courses')">
+            Courses
+        </button>
+
+        <button onclick="quickQuestion('fees')">
+            Fees
+        </button>
+
+        <button onclick="quickQuestion('eligibility')">
+            Eligibility
+        </button>
+
+        <button onclick="quickQuestion('admission')">
+            Admission
+        </button>
+
+        <button onclick="quickQuestion('documents')">
+            Documents
+        </button>
+    </div>
+
+    <div class="input-area">
+
+        <input
+            type="text"
+            id="userInput"
+            placeholder="Ask your admission question..."
+            onkeypress="handleEnter(event)"
+        >
+
+        <button class="send" onclick="sendMessage()">
+            Send
+        </button>
+
+    </div>
+
+</div>
+
+
+<script>
+
+function sendMessage() {
+
+    const input = document.getElementById("userInput");
+
+    const message = input.value.trim();
+
+    if (message === "") {
+        return;
+    }
+
+    addMessage(message, "user");
+
+    input.value = "";
+
+    setTimeout(function() {
+
+        const reply = getAdmissionReply(message);
+
+        addMessage(reply, "bot");
+
+    }, 500);
+}
+
+
+function quickQuestion(question) {
+
+    addMessage(question, "user");
+
+    setTimeout(function() {
+
+        const reply = getAdmissionReply(question);
+
+        addMessage(reply, "bot");
+
+    }, 500);
+}
+
+
+function addMessage(text, type) {
+
+    const messages = document.getElementById("messages");
+
+    const div = document.createElement("div");
+
+    div.classList.add("message", type);
+
+    div.innerHTML = text;
+
+    messages.appendChild(div);
+
+    messages.scrollTop = messages.scrollHeight;
+}
+
+
+function getAdmissionReply(message) {
+
+    message = message.toLowerCase();
+
+
+    /* Courses */
+
+    if (
+        message.includes("course") ||
+        message.includes("courses") ||
+        message.includes("program")
+    ) {
+
+        return `
+        🎓 <b>Courses Available:</b><br><br>
+
+        • CCC<br>
+        • O-Level<br>
+        • ADCA<br>
+        • DCA<br>
+        • PGDCA<br>
+        • Python<br>
+        • AI & Machine Learning<br>
+        • Web Development<br>
+        • IoT & Robotics
+        `;
+    }
+
+
+    /* Fees */
+
+    if (
+        message.includes("fee") ||
+        message.includes("fees") ||
+        message.includes("price")
+    ) {
+
+        return `
+        💰 <b>Course Fees</b><br><br>
+
+        Fees depend on the selected course.<br><br>
+
+        Please tell me the course name, for example:<br>
+        <b>"ADCA fees"</b>
+        `;
+    }
+
+
+    /* Eligibility */
+
+    if (
+        message.includes("eligibility") ||
+        message.includes("qualification") ||
+        message.includes("eligible")
+    ) {
+
+        return `
+        📚 <b>Eligibility</b><br><br>
+
+        Eligibility depends on the course.<br><br>
+
+        Please tell me which course you are interested in,
+        and I can provide the eligibility details.
+        `;
+    }
+
+
+    /* Duration */
+
+    if (
+        message.includes("duration") ||
+        message.includes("how long") ||
+        message.includes("months")
+    ) {
+
+        return `
+        ⏱️ <b>Course Duration</b><br><br>
+
+        Course duration varies depending on the program.<br><br>
+
+        Please select or enter the course name.
+        `;
+    }
+
+
+    /* Admission */
+
+    if (
+        message.includes("admission") ||
+        message.includes("join") ||
+        message.includes("apply")
+    ) {
+
+        return `
+        📝 <b>Admission Process</b><br><br>
+
+        1️⃣ Select your course<br>
+        2️⃣ Check eligibility<br>
+        3️⃣ Submit admission form<br>
+        4️⃣ Submit required documents<br>
+        5️⃣ Complete fee payment<br>
+        6️⃣ Start your classes
+        `;
+    }
+
+
+    /* Documents */
+
+    if (
+        message.includes("document") ||
+        message.includes("documents") ||
+        message.includes("certificate")
+    ) {
+
+        return `
+        📄 <b>Required Documents</b><br><br>
+
+        • Aadhaar Card<br>
+        • Passport-size photograph<br>
+        • Previous qualification certificate<br>
+        • Address proof<br><br>
+
+        Additional documents may be required for specific courses.
+        `;
+    }
+
+
+    /* Online */
+
+    if (
+        message.includes("online") ||
+        message.includes("offline") ||
+        message.includes("class")
+    ) {
+
+        return `
+        💻 We can provide information about
+        available online/offline classes.<br><br>
+
+        Please tell us your preferred course.
+        `;
+    }
+
+
+    /* Contact */
+
+    if (
+        message.includes("contact") ||
+        message.includes("phone") ||
+        message.includes("number")
+    ) {
+
+        return `
+        📞 <b>Contact Admission Team</b><br><br>
+
+        Phone: +91 XXXXXXXXXX<br>
+        WhatsApp: +91 XXXXXXXXXX<br>
+        Email: admission@example.com
+        `;
+    }
+
+
+    /* Greeting */
+
+    if (
+        message.includes("hello") ||
+        message.includes("hi") ||
+        message.includes("namaste")
+    ) {
+
+        return `
+        👋 Hello! Welcome to our institute.<br><br>
+
+        How can I help you with admission?<br><br>
+
+        You can ask about <b>courses, fees, eligibility,
+        duration, admission process or documents.</b>
+        `;
+    }
+
+
+    /* Default */
+
+    return `
+        😊 Thank you for your enquiry.<br><br>
+
+        I can help you with:<br>
+        🎓 Courses<br>
+        💰 Fees<br>
+        📚 Eligibility<br>
+        ⏱️ Duration<br>
+        📝 Admission Process<br>
+        📄 Documents<br><br>
+
+        Please type your question.
+    `;
+}
+
+
+function handleEnter(event) {
+
+    if (event.key === "Enter") {
+        sendMessage();
+    }
+
+}
+
+</script>
+
+</body>
+</html>
